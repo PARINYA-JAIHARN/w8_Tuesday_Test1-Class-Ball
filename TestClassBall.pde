@@ -1,6 +1,8 @@
 float eachblockarea,eachcirarea,allcir=0;
 Ball[] nextBall;
 int n = 5;
+String status[] = {};
+
 void setup()
 {
   size(1000, 800);
@@ -11,12 +13,13 @@ void setup()
     float r_height = random(150, 650);
     float r_size = random(50, 300);
     nextBall[i] = new Ball(r_width, r_height, r_size);
+    status[i] = "1";
     eachcirarea=nextBall[i].getBallArea();
     allcir=allcir+eachcirarea;
-    
- }
-    println("total ball area : "+allcir);
+  }
+  println("total ball area : "+allcir);
 }
+
 void draw()
 {
  
@@ -27,27 +30,37 @@ void draw()
       {
        nextBall[p].draw();
       }
- } 
+   } 
 }
+
 void mousePressed()
 {
-  float k;
   for(int p=0;p<n;p++)
   {
- 
+    
     if(dist(mouseX,mouseY,nextBall[p].position_x,nextBall[p].position_y)<(nextBall[p].size/2))
     {
       delay(150);
       if(nextBall[p].show==true)
       {
-      allcir=allcir-nextBall[p].getBallArea();
+        allcir=allcir-nextBall[p].getBallArea();
+        nextBall[p].show=false; 
+        status[p] = "0";
       }
-      nextBall[p].show=false; 
+      if (status[p] = "0")
+      {
+        if(nextBall[p].show==false)
+        {
+          allcir=allcir+nextBall[p].getBallArea();
+          nextBall[p].show=true;
+          status[p] = "1";
+        }
+      }
     }
-   k=nextBall[p].getBallArea();
   }
 println(" Ball area left "+allcir); 
 }  
+
 public class Ball
 {
   boolean show=true;
